@@ -1,0 +1,36 @@
+{
+  "id": "48b58e41-e7a9-43b4-b6cd-969d1649ba6e",
+  "name": "Unlock Secure Endpoints",
+  "publisher": "Tine Staric",  
+  "version": "1.0.0.0",
+  "brief": "Code Examples on how to connect to Secure Endpoints.",
+  "description": "A collection of code examples on how to connect to endpoints with higher security requirements.",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "contextSensitiveHelpUrl": "https://www.example.com/",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "21.0.0.0",
+  "application": "21.0.0.0",
+  "idRanges": [
+    {
+      "from": 50100,
+      "to": 50149
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "10.0",
+  "features": [
+    "NoImplicitWith",
+    "NoPromotedActionProperties"
+  ],
+  "applicationInsightsConnectionString": "InstrumentationKey=9ed73cbc-68c9-4442-bc32-9e6de04ce8e6;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/",
+  "keyVaultUrls": ["https://personaldemokeyvault.vault.azure.net/"]
+}

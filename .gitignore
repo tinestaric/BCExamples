@@ -1,0 +1,10 @@
+*.vscode.zip
+*.app
+*.snapshots/
+*.alpackages/
+*.vscode/
+*.alcache/
+debug.log
+*.code-workspace
+*.g.xlf
+*VSCode Settings/
