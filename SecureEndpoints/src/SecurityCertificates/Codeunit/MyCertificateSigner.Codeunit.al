@@ -20,15 +20,20 @@ codeunit 50107 MyCertificateSigner implements ICertificateSigner
 
     procedure Sign(Data: Text) Base64Signature: Text
     var
+        Base64: Codeunit "Base64 Convert";
+        CryptographyManagement: Codeunit "Cryptography Management";
+        SignatureKey: Codeunit "Signature Key";
         TempBlob: Codeunit "Temp Blob";
         InStr: InStream;
-        OutStr: OutStream;
+        SignatureOutStream: OutStream;
     begin
-        TempBlob.CreateOutStream(OutStr);
-        OutStr.WriteText(Data);
-        TempBlob.CreateInStream(InStr);
+        TempBlob.CreateOutStream(SignatureOutStream);
 
-        exit(Sign(InStr));
+        SignatureKey.FromBase64String(GetCertificate(), '', true);
+        CryptographyManagement.SignData(Data, SignatureKey, "Hash Algorithm"::SHA256, SignatureOutStream);
+
+        TempBlob.CreateInStream(InStr);
+        Base64Signature := Base64.ToBase64(InStr);
     end;
 
     local procedure GetCertificate() SecretValue: Text

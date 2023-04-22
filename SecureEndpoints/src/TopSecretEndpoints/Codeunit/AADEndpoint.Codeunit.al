@@ -1,8 +1,7 @@
 codeunit 50105 AADEndpoint implements IEndpoint
 {
-    procedure GetRequestMessage(Token: Text; Content: Text): HttpRequestMessage;
+    procedure GetRequestMessage(Token: Text; Content: Text) RequestMessage: HttpRequestMessage;
     var
-        RequestMessage: HttpRequestMessage;
         RequestHeaders: HttpHeaders;
         ResourceURL: Text;
     begin

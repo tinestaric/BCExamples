@@ -1,8 +1,12 @@
-codeunit 50103 FacebookIdP implements IIdentityProvider
+codeunit 50103 FacebookAuthCode implements ITokenGetter
 {
-    [NonDebuggable]
-    procedure GetTokenWithAuthCode(): Text;
     var
+        EndpointManagement: Codeunit EndpointManagement;
+
+    [NonDebuggable]
+    procedure GetToken() Token: Text;
+    var
+        JsonParser: Codeunit JsonParser;
         OAuth2ControlAddIn: Page "OAuth2 Control Add-In";
         Client: HttpClient;
         ResponseMessage: HttpResponseMessage;
@@ -14,10 +18,11 @@ codeunit 50103 FacebookIdP implements IIdentityProvider
         ResourceURL: Text;
         ResponseBody: Text;
         State: Text;
+        JsonToken: JsonToken;
     begin
-        State := Format(CreateGuid());
+        State := Format(CreateGuid(), 0, 4);
 
-        OAuthAuthorityURL := StrSubstNo(AuthorityUrlLbl, GetClientId(), GetRedirectUrl(), State);
+        OAuthAuthorityURL := StrSubstNo(AuthorityUrlLbl, GetClientId(), EndpointManagement.GetRedirectUrl(), State);
 
         OAuth2ControlAddIn.SetOAuth2Properties(OAuthAuthorityURL, State);
         OAuth2ControlAddIn.RunModal();
@@ -28,42 +33,22 @@ codeunit 50103 FacebookIdP implements IIdentityProvider
         if AuthCodeErr <> '' then
             Error(AuthCodeErr);
 
-        ResourceURL := StrSubstNo(TokenUrlLbl, GetClientId(), GetRedirectUrl(), GetClientSecret(), AuthCode);
+        ResourceURL := StrSubstNo(TokenUrlLbl, GetClientId(), EndpointManagement.GetRedirectUrl(), GetClientSecret(), AuthCode);
 
         Client.Get(ResourceURL, ResponseMessage);
 
+        ResponseMessage.Content.ReadAs(ResponseBody);
+
         if ResponseMessage.IsSuccessStatusCode then begin
-            ResponseMessage.Content.ReadAs(ResponseBody);
-            Message(ResponseBody); //TODO: Parse out a token
-        end else begin
-            ResponseMessage.Content.ReadAs(ResponseBody);
+            JsonToken.ReadFrom(ResponseBody);
+            Token := JsonParser.GetValueAsText(JsonToken, 'access_token');
+        end else
             Error('%1 %2', ResponseMessage.ReasonPhrase, ResponseBody);
-        end;
-    end;
-
-    procedure GetTokenWithRefreshToken(): Text;
-    begin
-
-    end;
-
-    procedure GetTokenWithClientCredentials(): Text;
-    begin
-
     end;
 
     local procedure GetClientId(): Text
     begin
         EXIT('556109569412929')
-    end;
-
-    local procedure GetRedirectUrl(): Text
-    var
-        Environment: Codeunit "Environment Information";
-    begin
-        if Environment.IsSaaSInfrastructure() then
-            exit('https://businesscentral.dynamics.com/OAuthLanding.htm')
-        else
-            exit('https://cloud-bc-dev.northeurope.cloudapp.azure.com/BC/');
     end;
 
     [NonDebuggable]

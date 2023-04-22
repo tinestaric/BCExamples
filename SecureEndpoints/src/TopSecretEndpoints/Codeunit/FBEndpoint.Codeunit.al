@@ -1,8 +1,7 @@
 codeunit 50104 FBEndpoint implements IEndpoint
 {
-    procedure GetRequestMessage(Token: Text; Content: Text): HttpRequestMessage;
+    procedure GetRequestMessage(Token: Text; Content: Text) RequestMessage: HttpRequestMessage;
     var
-        RequestMessage: HttpRequestMessage;
         RequestHeaders: HttpHeaders;
         ResourceURL: Text;
     begin

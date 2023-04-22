@@ -10,11 +10,10 @@ codeunit 50106 CertificateEndpoint implements IEndpoint
         IsInitialized := true;
     end;
 
-    procedure GetRequestMessage(Token: Text; Content: Text): HttpRequestMessage;
+    procedure GetRequestMessage(Token: Text; Content: Text) RequestMessage: HttpRequestMessage;
     var
         HttpContent: HttpContent;
-        RequestHeaders: HttpHeaders;
-        RequestMessage: HttpRequestMessage;
+        ContentHeaders: HttpHeaders;
         ContentSignature: Text;
         ResourceURL: Text;
     begin
@@ -27,16 +26,17 @@ codeunit 50106 CertificateEndpoint implements IEndpoint
             Content := GetContent();
 
         HttpContent.WriteFrom(Content);
+        HttpContent.ReadAs(Content);
         RequestMessage.Content(HttpContent);
 
-        RequestMessage.GetHeaders(RequestHeaders);
-        RequestHeaders.Clear();
-        RequestHeaders.Add('Content-Type', 'application/json');
+        RequestMessage.Content.GetHeaders(ContentHeaders);
+        ContentHeaders.Clear();
+        ContentHeaders.Add('Content-Type', 'application/json');
 
         _ICertificateSigner := GetCertificateSigner();
         ContentSignature := _ICertificateSigner.Sign(Content);
 
-        RequestHeaders.Add('Digest', ContentSignature);
+        ContentHeaders.Add('Digest', ContentSignature);
     end;
 
     local procedure GetCertificateSigner(): Interface ICertificateSigner
