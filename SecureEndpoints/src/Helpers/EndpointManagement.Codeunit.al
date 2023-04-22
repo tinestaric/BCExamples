@@ -1,27 +1,38 @@
 codeunit 50101 EndpointManagement
 {
+    var
+        _ICertificateSigner: Interface ICertificateSigner;
+        IsInitialized: Boolean;
 
     // [NonDebuggable]
     internal procedure GetTopSecretInfo(
         ITokenGetter: Interface ITokenGetter;
-        IEndpoint: Interface IEndpoint
+        IEndpoint: Interface IEndpoint;
+        SignMessage: Boolean
     ) ResponseMessage: HttpResponseMessage
     var
+        Client: HttpClient;
+        RequestMessage: HttpRequestMessage;
         Token: Text;
     begin
         Token := ITokenGetter.GetToken();
 
-        ResponseMessage := CallEndpoint(IEndpoint, Token);
-    end;
-
-    local procedure CallEndpoint(IEndpoint: Interface IEndpoint; Token: Text) ResponseMessage: HttpResponseMessage
-    var
-        Client: HttpClient;
-        RequestMessage: HttpRequestMessage;
-    begin
         RequestMessage := IEndpoint.GetRequestMessage(Token, '');
 
+        if SignMessage then
+            SignMessageContent(RequestMessage);
+
         Client.Send(RequestMessage, ResponseMessage);
+    end;
+
+    local procedure GetCertificateSigner(): Interface ICertificateSigner
+    var
+        MyCertificateSigner: Codeunit MyCertificateSigner;
+    begin
+        if not IsInitialized then
+            exit(MyCertificateSigner)
+        else
+            exit(_ICertificateSigner);
     end;
 
     internal procedure GetRedirectUrl(): Text
@@ -56,5 +67,22 @@ codeunit 50101 EndpointManagement
 
         Baseurl := CopyStr(Baseurl, 1, EndBaseUrlIndex - 1);
         exit(CopyStr(RedirectUrl, 1, BaseIndex - 1) + Baseurl);
+    end;
+
+    local procedure SignMessageContent(var RequestMessage: HttpRequestMessage)
+    var
+        ICertificateSigner: Interface ICertificateSigner;
+        HttpContent: HttpContent;
+        HttpHeaders: HttpHeaders;
+        Content: Text;
+        ContentSignature: Text;
+    begin
+        HttpContent := RequestMessage.Content();
+        HttpContent.ReadAs(Content);
+        ICertificateSigner := GetCertificateSigner();
+        ContentSignature := ICertificateSigner.Sign(Content);
+
+        HttpContent.GetHeaders(HttpHeaders);
+        HttpHeaders.Add('Digest', ContentSignature);
     end;
 }

@@ -19,10 +19,15 @@ page 50101 EndpointTester
                     Caption = 'Endpoint';
                     ToolTip = 'Specify the endpoint to be tested.';
                 }
-                field(IdP; IdP)
+                field(TokenGetter; TokenGetter)
                 {
-                    Caption = 'Identity Provider';
-                    ToolTip = 'Specify the identity provider to be used for authentication.';
+                    Caption = 'Token Getter';
+                    ToolTip = 'Specify the Token Getter to be used for authentication.';
+                }
+                field(SignMessage; SignMessage)
+                {
+                    Caption = 'Sign Message';
+                    ToolTip = 'Specify whether the message should be signed.';
                 }
             }
             group(Send)
@@ -38,7 +43,7 @@ page 50101 EndpointTester
                     var
                         ResponseMessage: HttpResponseMessage;
                     begin
-                        ResponseMessage := EndpointManagement.GetTopSecretInfo(IdP, Endpoint);
+                        ResponseMessage := EndpointManagement.GetTopSecretInfo(TokenGetter, Endpoint, SignMessage);
 
                         IsSuccess := ResponseMessage.IsSuccessStatusCode;
                         StatusCode := ResponseMessage.HttpStatusCode;
@@ -93,7 +98,8 @@ page 50101 EndpointTester
         StatusCode: Integer;
         IsSuccess: Boolean;
         ReasonPhrase: Text;
-        IdP: Enum IdentityProvider;
+        SignMessage: Boolean;
+        TokenGetter: Enum IdentityProvider;
         Endpoint: Enum Endpoint;
         SendOAuthMessageLbl: Label 'Send OAuth Message';
 }
