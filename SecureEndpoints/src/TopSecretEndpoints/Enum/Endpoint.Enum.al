@@ -2,15 +2,15 @@ enum 50102 Endpoint implements IEndpoint
 {
     Extensible = true;
 
-    value(1; FBEndpoint)
-    {
-        Implementation = IEndpoint = FBEndpoint;
-        Caption = 'Facebook Endpoint';
-    }
-    value(2; AADEndpoint)
+    value(1; AADEndpoint)
     {
         Implementation = IEndpoint = AADEndpoint;
         Caption = 'Azure Active Directory Endpoint';
+    }
+    value(2; FBEndpoint)
+    {
+        Implementation = IEndpoint = FBEndpoint;
+        Caption = 'Facebook Endpoint';
     }
     value(3; CertificateEndpoint)
     {

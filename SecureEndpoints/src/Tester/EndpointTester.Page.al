@@ -33,7 +33,7 @@ page 50101 EndpointTester
             group(Send)
             {
                 ShowCaption = false;
-                field(SendOAuthMessage; SendOAuthMessageLbl)
+                field(SendRequest; SendRequestLbl)
                 {
                     ShowCaption = false;
                     ToolTip = 'Sends the OAuth Message based on the above parameters.';
@@ -101,5 +101,5 @@ page 50101 EndpointTester
         SignMessage: Boolean;
         TokenGetter: Enum IdentityProvider;
         Endpoint: Enum Endpoint;
-        SendOAuthMessageLbl: Label 'Send OAuth Message';
+        SendRequestLbl: Label 'Send Request';
 }

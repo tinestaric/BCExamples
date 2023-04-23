@@ -1,11 +1,11 @@
 codeunit 50102 AADAuthCode implements ITokenGetter
 {
+
+    [NonDebuggable]
+    procedure GetToken() AccessToken: Text;
     var
         OAuth2: Codeunit OAuth2;
         EndpointManagement: Codeunit EndpointManagement;
-
-    procedure GetToken() AccessToken: Text;
-    var
         Error: Text;
     begin
         OAuth2.AcquireTokenByAuthorizationCode(
