@@ -4,7 +4,7 @@ codeunit 50101 EndpointManagement
         _ICertificateSigner: Interface ICertificateSigner;
         IsInitialized: Boolean;
 
-    [NonDebuggable]
+    // [NonDebuggable]
     internal procedure GetTopSecretInfo(
         ITokenGetter: Interface ITokenGetter;
         IEndpoint: Interface IEndpoint;
@@ -78,12 +78,15 @@ codeunit 50101 EndpointManagement
         ContentSignature: Text;
     begin
         HttpContent := RequestMessage.Content();
-        HttpContent.ReadAs(Content);
+        if not HttpContent.ReadAs(Content) then
+            exit;
 
         ICertificateSigner := GetCertificateSigner();
         ContentSignature := ICertificateSigner.Sign(Content);
 
         HttpContent.GetHeaders(HttpHeaders);
         HttpHeaders.Add('Digest', ContentSignature);
+
+        RequestMessage.Content(HttpContent);
     end;
 }

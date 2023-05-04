@@ -5,7 +5,7 @@ codeunit 50105 AADEndpoint implements IEndpoint
         RequestHeaders: HttpHeaders;
         ResourceURL: Text;
     begin
-        ResourceURL := 'https://topsecretfunction.azurewebsites.net/api/SecureEndpointAAD?code=ww0E70mHaO--VIV3oAnl-9ARvkTn70WP12uZlMcne42bAzFumeqnSg==';
+        ResourceURL := 'https://bc-apimanager.azure-api.net/TopSecret-AzureFunction/SecureEndpointAAD';
 
         RequestMessage.SetRequestUri(ResourceURL);
         RequestMessage.Method('GET');
