@@ -4,7 +4,7 @@ codeunit 50109 ProxyWhitelistedEndpoint implements IEndpoint
     var
         ResourceURL: Text;
     begin
-        ResourceURL := 'https://bc-apimanager.azure-api.net/TopSecret-AzureFunction/SecureEndpointWhitelisted';
+        ResourceURL := 'https://ipwhitelister.azurewebsites.net/api/ForwardRequest?code=FjVnJssFctrMbUZGWqBxCBfZmRqxFNwF27ZAXA_xmeRCAzFuo1mYyg==';
 
         RequestMessage.SetRequestUri(ResourceURL);
         RequestMessage.Method('GET');
