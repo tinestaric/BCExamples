@@ -17,6 +17,7 @@ codeunit 50112 AADS2S implements ITokenGetter
         Request.SetRequestUri(TokenURLTok);
         Request.Method('POST');
 
+        // Create the content for S2S token request
         ContentText := 'grant_type=client_credentials&client_id=' + GetClientId() + '&client_secret=' + GetClientSecret();
         HttpContent.WriteFrom(ContentText);
 
@@ -30,6 +31,7 @@ codeunit 50112 AADS2S implements ITokenGetter
 
         Response.Content.ReadAs(ResponseBody);
 
+        // Parse the response to get the access token
         if Response.IsSuccessStatusCode then begin
             JsonToken.ReadFrom(ResponseBody);
             AccessToken := JsonParser.GetValueAsText(JsonToken, 'access_token');

@@ -52,6 +52,7 @@ codeunit 50101 EndpointManagement
         Baseurl: Text;
         RedirectUrl: Text;
     begin
+        // Build the base url of the current environment
         RedirectUrl := GetUrl(ClientType::Web);
 
         if StrPos(LowerCase(RedirectUrl), 'https://') <> 0 then
@@ -77,13 +78,16 @@ codeunit 50101 EndpointManagement
         Content: Text;
         ContentSignature: Text;
     begin
+        // Get the content of the request
         HttpContent := RequestMessage.Content();
         if not HttpContent.ReadAs(Content) then
             exit;
 
+        // Create the signature of the content
         ICertificateSigner := GetCertificateSigner();
         ContentSignature := ICertificateSigner.Sign(Content);
 
+        // Add the signature to the request
         HttpContent.GetHeaders(HttpHeaders);
         HttpHeaders.Add('Digest', ContentSignature);
 

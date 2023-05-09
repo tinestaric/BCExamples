@@ -19,10 +19,12 @@ codeunit 50103 FacebookAuthCode implements ITokenGetter
         State: Text;
         JsonToken: JsonToken;
     begin
+        // Create the Authorization URL
         State := Format(CreateGuid(), 0, 4);
 
         OAuthAuthorityURL := StrSubstNo(AuthorityUrlLbl, GetClientId(), EndpointManagement.GetRedirectUrl(), State);
 
+        // Open the OAuth2 Control Add-In and get the Auth Code
         OAuth2ControlAddIn.SetOAuth2Properties(OAuthAuthorityURL, State);
         OAuth2ControlAddIn.RunModal();
 
@@ -32,12 +34,14 @@ codeunit 50103 FacebookAuthCode implements ITokenGetter
         if AuthCodeErr <> '' then
             Error(AuthCodeErr);
 
+        // Send the Auth Code to the Token Endpoint and get the Token
         TokenUrl := StrSubstNo(TokenUrlLbl, GetClientId(), EndpointManagement.GetRedirectUrl(), GetClientSecret(), AuthCode);
 
         Client.Get(TokenUrl, ResponseMessage);
 
         ResponseMessage.Content.ReadAs(ResponseBody);
 
+        // Parse the Token from the Response Body
         if ResponseMessage.IsSuccessStatusCode then begin
             JsonToken.ReadFrom(ResponseBody);
             Token := JsonParser.GetValueAsText(JsonToken, 'access_token');

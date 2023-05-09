@@ -29,7 +29,10 @@ codeunit 50107 MyCertificateSigner implements ICertificateSigner
     begin
         TempBlob.CreateOutStream(SignatureOutStream);
 
+        // Import the certificate from the secret store and retrieve the private key
         SignatureKey.FromBase64String(GetCertificate(), '', true);
+
+        // Sign the data
         CryptographyManagement.SignData(Data, SignatureKey, "Hash Algorithm"::SHA256, SignatureOutStream);
 
         TempBlob.CreateInStream(InStr);
