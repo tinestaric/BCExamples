@@ -1,6 +1,6 @@
 codeunit 50112 AADS2S implements ITokenGetter
 {
-    // [NonDebuggable]
+    [NonDebuggable]
     procedure GetToken() AccessToken: Text;
     var
         JsonParser: Codeunit JsonParser;

@@ -4,7 +4,7 @@ codeunit 50101 EndpointManagement
         _ICertificateSigner: Interface ICertificateSigner;
         IsInitialized: Boolean;
 
-    // [NonDebuggable]
+    [NonDebuggable]
     internal procedure GetTopSecretInfo(
         ITokenGetter: Interface ITokenGetter;
         IEndpoint: Interface IEndpoint;
