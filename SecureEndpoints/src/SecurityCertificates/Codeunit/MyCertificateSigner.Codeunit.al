@@ -39,6 +39,7 @@ codeunit 50107 MyCertificateSigner implements ICertificateSigner
         Base64Signature := Base64.ToBase64(InStr);
     end;
 
+    [NonDebuggable]
     local procedure GetCertificate() SecretValue: Text
     var
         KeyVault: Codeunit "App Key Vault Secret Provider";

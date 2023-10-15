@@ -63,17 +63,20 @@ page 50100 "OAuth2 Control Add-In"
         NotMatchingStateErr: Label 'The state parameter value does not match.';
         AuthCodeErrorLbl: Label 'Error: %1, description: %2', Comment = '%1 = The authorization error message, %2 = The authorization error description';
 
+    [NonDebuggable]
     procedure SetOAuth2Properties(AuthRequestUrl: Text; AuthInitialState: Text)
     begin
         OAuthRequestUrl := AuthRequestUrl;
         State := AuthInitialState;
     end;
 
+    [NonDebuggable]
     procedure GetAuthCode(): Text
     begin
         exit(AuthCode);
     end;
 
+    [NonDebuggable]
     procedure GetAuthError(): Text
     begin
         exit(AuthError);
