@@ -28,6 +28,7 @@ codeunit 50102 AADAuthCode implements ITokenGetter
         exit('79b345f6-8ab0-4cae-8305-65671c04199d');
     end;
 
+    [NonDebuggable]
     local procedure GetClientSecret() Secret: Text
     var
         KeyVault: Codeunit "App Key Vault Secret Provider";

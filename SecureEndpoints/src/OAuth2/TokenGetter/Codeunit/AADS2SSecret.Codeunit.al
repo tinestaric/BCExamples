@@ -1,4 +1,4 @@
-codeunit 50112 AADS2S implements ITokenGetter
+codeunit 50113 AADS2SSecret implements ITokenGetter
 {
     [NonDebuggable]
     procedure GetToken() AccessToken: Text;
@@ -12,13 +12,13 @@ codeunit 50112 AADS2S implements ITokenGetter
         JsonToken: JsonToken;
         TokenURLTok: Label 'https://login.microsoftonline.com/b65e6ce1-543b-4eb3-8b2a-5e3e0f086e36/oauth2/token';
         ResponseBody: Text;
-        ContentText: Text;
+        ContentText: SecretText;
     begin
         Request.SetRequestUri(TokenURLTok);
         Request.Method('POST');
 
         // Create the content for S2S token request
-        ContentText := 'grant_type=client_credentials&client_id=' + GetClientId() + '&client_secret=' + GetClientSecret();
+        ContentText := SecretStrSubstNo('grant_type=client_credentials&client_id=%1&client_secret=%2', GetClientId(), GetClientSecret());
         HttpContent.WriteFrom(ContentText);
 
         HttpContent.GetHeaders(Headers);
@@ -47,11 +47,14 @@ codeunit 50112 AADS2S implements ITokenGetter
     end;
 
     [NonDebuggable]
-    local procedure GetClientSecret() Secret: Text
+    local procedure GetClientSecret(): SecretText
     var
         KeyVault: Codeunit "App Key Vault Secret Provider";
+        Secret: Text;
     begin
         if KeyVault.TryInitializeFromCurrentApp() then
             KeyVault.GetSecret('AADAzFunct-Secret', Secret);
+
+        EXIT(Secret);
     end;
 }

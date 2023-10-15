@@ -11,10 +11,7 @@ codeunit 50106 CertificateEndpoint implements IEndpoint
         RequestMessage.SetRequestUri(ResourceURL);
         RequestMessage.Method('POST');
 
-        if Content = '' then
-            Content := GetContent();
-
-        HttpContent.WriteFrom(Content);
+        HttpContent.WriteFrom(GetContent());
         RequestMessage.Content(HttpContent);
 
         RequestMessage.Content.GetHeaders(ContentHeaders);
@@ -24,6 +21,6 @@ codeunit 50106 CertificateEndpoint implements IEndpoint
 
     local procedure GetContent(): Text
     begin
-        EXIT('{"name":"Tine Staric","age":42}');
+        EXIT('{"name":"Tine Staric","age":27}');
     end;
 }
