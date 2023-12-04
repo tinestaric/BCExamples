@@ -12,7 +12,7 @@ codeunit 70100 NotationParser
     var
         Stack: Record Stack;
         InvalidExpressionErr: Label 'Invalid Expression.';
-        InvalidExpressionTokenErr: Label '%1 is not a valid character in calculation formula.', Comment = '%1 = Invalid Token';
+        InvalidExpressionTokenErr: Label '%1 is not a valid expression token.', Comment = '%1 = Invalid Token';
         Operators: List of [Text];
         TokenList: List of [Text];
         PostfixNotation: Text;
