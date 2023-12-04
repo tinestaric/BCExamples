@@ -12,7 +12,7 @@ codeunit 70100 NotationParser
     var
         Stack: Record Stack;
         InvalidExpressionErr: Label 'Invalid Expression.';
-        InvalidExpressionTokenErr: Label '%1 is not a valid character in calculation formula.', Comment = '%1 = Invalid Token';
+        InvalidExpressionTokenErr: Label '%1 is not a valid expression token.', Comment = '%1 = Invalid Token';
         Operators: List of [Text];
         TokenList: List of [Text];
         PostfixNotation: Text;
@@ -27,9 +27,9 @@ codeunit 70100 NotationParser
             case true of
                 IsVariableOrNumber(Token): // If the scanned character is an operand, add it to output.
                     PostfixNotation += Token + ' ';
-                Token = '(': // If the scanned character is an '(', push it to the vStack.
+                Token = '(': // If the scanned character is an '(', push it to the Stack.
                     Stack.Push(Token);
-                Token = ')': // If the scanned character is an ')', pop and output from the vStack until an '(' is encountered.
+                Token = ')': // If the scanned character is an ')', pop and output from the Stack until an '(' is encountered.
                     begin
                         while (Stack.Count > 0) and not (Stack.Peek() = '(') do
                             PostfixNotation += Stack.Pop() + ' ';
@@ -52,7 +52,7 @@ codeunit 70100 NotationParser
                     Error(InvalidExpressionTokenErr, Token);
             end;
 
-        // pop all the operators from the vStack
+        // pop all the operators from theStack
         while (Stack.Count > 0) do
             PostfixNotation += Stack.Pop() + ' ';
 
@@ -60,18 +60,18 @@ codeunit 70100 NotationParser
         EXIT(PostfixNotation);
     end;
 
-    local procedure Normalize(var vExpression: Text)
+    local procedure Normalize(var Expression: Text)
     begin
-        vExpression := vExpression.ToUpper();
-        vExpression := vExpression.Replace(' ', '');
-        vExpression := vExpression.Replace('+', ' + ');
-        vExpression := vExpression.Replace('-', ' - ');
-        vExpression := vExpression.Replace('*', ' * ');
-        vExpression := vExpression.Replace('/', ' / ');
-        vExpression := vExpression.Replace('^', ' ^ ');
-        vExpression := vExpression.Replace('(', '( ');
-        vExpression := vExpression.Replace(')', ' )');
-        vExpression := vExpression.Replace('\ - ', ' -');
+        Expression := Expression.ToUpper();
+        Expression := Expression.Replace(' ', '');
+        Expression := Expression.Replace('+', ' + ');
+        Expression := Expression.Replace('-', ' - ');
+        Expression := Expression.Replace('*', ' * ');
+        Expression := Expression.Replace('/', ' / ');
+        Expression := Expression.Replace('^', ' ^ ');
+        Expression := Expression.Replace('(', '( ');
+        Expression := Expression.Replace(')', ' )');
+        Expression := Expression.Replace('\ - ', ' -');
     end;
 
     local procedure IsVariableOrNumber(vTok: Text): Boolean
@@ -150,13 +150,13 @@ codeunit 70100 NotationParser
     #endregion
 
     #region Initialize
-    local procedure InitializeOperators(var vOperators: List of [Text])
+    local procedure InitializeOperators(var Operators: List of [Text])
     begin
-        vOperators.Add('+');
-        vOperators.Add('-');
-        vOperators.Add('*');
-        vOperators.Add('/');
-        vOperators.Add('^');
+        Operators.Add('+');
+        Operators.Add('-');
+        Operators.Add('*');
+        Operators.Add('/');
+        Operators.Add('^');
     end;
     #endregion
 }
