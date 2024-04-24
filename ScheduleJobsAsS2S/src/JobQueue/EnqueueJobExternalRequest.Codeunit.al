@@ -11,6 +11,7 @@ codeunit 50101 EnqueueJobExternalRequest
         AADApplication: Record "AAD Application";
         ScheduledJobsPerApp: Query ScheduledJobsPerApp;
     begin
+        // Check if the web service is created and published
         CheckWebService();
 
         AADApplication := ScheduledJobsPerApp.FindLeastLoadedApp();
@@ -36,7 +37,7 @@ codeunit 50101 EnqueueJobExternalRequest
         ResponseBody: Text;
         ContentText: SecretText;
     begin
-        Request.SetRequestUri(StrSubstNo(TokenURLTok, TenantId()));
+        Request.SetRequestUri(StrSubstNo(TokenURLTok, GetTenantGuid()));
         Request.Method('POST');
 
         // Create the content for S2S token request
@@ -59,6 +60,14 @@ codeunit 50101 EnqueueJobExternalRequest
             AccessToken := GetValueAsText(JsonToken, 'access_token');
         end else
             Error('%1 %2', Response.ReasonPhrase, ResponseBody);
+    end;
+
+    local procedure GetTenantGuid(): Text
+    var
+        URLList: List of [Text];
+    begin
+        URLList := GetUrl(ClientType::Web).Split('/');
+        exit(URLList.Get(4));
     end;
 
     local procedure SelectJsonToken(JObject: JsonObject; Path: Text): Text
