@@ -47,7 +47,6 @@ namespace CallApiWithUserPool
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 
-                // Assuming the API call is a GET request
                 var response = await httpClient.PostAsync(apiEndpoint, null);
                 if (!response.IsSuccessStatusCode)
                 {

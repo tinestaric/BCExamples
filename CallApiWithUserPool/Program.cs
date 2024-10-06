@@ -12,10 +12,10 @@ var userPool = new UserPoolManager(users);
 var apiService = new ApiService(userPool, tokenUrl);
 
 // Make an API call
-for (var i = 0; i <10; i++)
-{ 
-    apiService.MakeApiCallAsync("https://api.businesscentral.dynamics.com/v2.0/{environmentName}/ODataV4/SimpleAPI_InsertEntry?company={CompanyName}"); // Replace with your actual endpoint and parameters
-    Console.WriteLine("Sent");
+for (var i = 0; i <800; i++)
+{
+    // Replace with your actual endpoint and parameters
+    apiService.MakeApiCallAsync("https://api.businesscentral.dynamics.com/v2.0/{environmentName}/ODataV4/SimpleAPI_InsertEntry?company={companyId}"); 
 }
 
 Console.ReadKey();
