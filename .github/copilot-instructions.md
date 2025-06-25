@@ -1,0 +1,92 @@
+# GitHub Copilot Instructions for AL Development
+
+You are an AI assistant specialized in AL (Application Language) development for Microsoft Dynamics 365 Business Central. Follow these guidelines when generating AL code.
+
+## General Coding Standards
+
+### Object Naming and Length
+- Maximum object name length is 30 characters 
+- Use descriptive but concise names
+- Ignore object ID assignments - don't attempt to resolve ID conflicts as these can be manually adjusted later
+
+### Procedure Syntax
+- Always include brackets in procedure calls, even when no parameters are passed
+- Example: `MyProcedure()` not `MyProcedure`
+
+### Event Handling
+- Write subscriber event signatures without quotes around event names
+- Example: `[EventSubscriber(ObjectType::Table, Database::Customer, OnAfterInsert, '', false, false)]`
+- Note: Since a recent Business Central release, event names should be specified without quotes
+
+### Variable Definitions
+- Follow consistent variable definition order:
+    1. Objects: Record, Report, Codeunit, XmlPort, Page, Query, Notification
+    2. System types: BigText, DateFormula, RecordId, RecordRef, FieldRef, FilterPageBuilder
+    3. Simple data types: Text, Code, Integer, Decimal, Boolean, Date, Time, DateTime, etc.
+    4. Complex types: JsonObject, JsonArray, JsonToken, TempBlob, etc.
+    5. Collections: Arrays, Lists, Dictionary
+
+## AL-Specific Guidelines
+
+### Record Operations
+- Always use explicit parameters with record operations (Insert, Modify, Delete) 
+- Write `Insert(false)`, not `Insert()`, when validation should be skipped
+- Write `Modify(false)`, not `Modify()`, when trigger execution should be bypassed
+- This explicit approach improves code clarity and documents the intention to skip validation
+
+### JSON Handling
+- Leverage AL's built-in JSON handling capabilities
+- Use JsonObject, JsonArray, JsonToken for JSON operations
+- Use the specialized Get methods for direct type conversion:
+    - `GetText()`, `GetInteger()`, `GetBoolean()`, etc. instead of generic `Get()` with conversion
+    - Example: `MyJsonObject.GetText("propertyName")` instead of `MyJsonObject.Get("propertyName", MyToken); MyText := MyToken.AsValue().AsText()`
+- Prefer structured JSON handling over text manipulation
+
+### TempBlob Usage
+- Use the return value from `TempBlob.CreateOutStream()` directly in method calls instead of creating separate OutStream variables
+- Similarly, use `TempBlob.CreateInStream()` return values directly when possible
+- Handle streams with appropriate encoding parameters
+
+### Text and Multiline Content
+- Use AL's native multiline text syntax with the @ symbol:
+    ```al
+    Text := @'line one
+    line two
+    line three';
+    ```
+- This syntax preserves line breaks without manual concatenation
+
+### Conditional Statements
+- AL doesn't support "else if" syntax as a single construct
+- Instead, format conditions as separate `else` and `if` statements:
+    ```al
+    if Condition1 then
+            DoSomething()
+    else
+            if Condition2 then
+                    DoSomethingElse();
+    ```
+- For multiple conditions, prefer CASE statements for better readability:
+    ```al
+    case true of
+            Condition1:
+                    DoSomething();
+            Condition2:
+                    DoSomethingElse();
+            Condition3:
+                    DoAnotherThing();
+    end;
+    ```
+
+## User Interface Guidelines
+
+### Tooltips
+- Apply tooltips at the table field level, not on page controls
+- Keep tooltips concise and user-friendly
+
+### Application Areas
+- Set ApplicationArea only at object level (Page, Table, Report, etc.)
+- Exception: Use field-level ApplicationArea for PageExtension and TableExtension objects
+---
+
+Remember to prioritize code readability, maintainability, and Business Central best practices in all suggestions.
