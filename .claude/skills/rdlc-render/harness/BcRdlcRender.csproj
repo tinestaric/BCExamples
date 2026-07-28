@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>bcrender</AssemblyName>
+    <RootNamespace>BcRdlcRender</RootNamespace>
+    <!-- ReportViewerCore compiles RDL expressions with the VB compiler at
+         render time; without this the first Render() throws looking for vbc. -->
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.*" />
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+  </ItemGroup>
+</Project>
