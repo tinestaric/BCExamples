@@ -371,3 +371,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# rdlc-render skill: bootstrap.ps1's output (ReportViewer + SqlServer.Types
+# DLLs from nuget.org, plus the compiled bcrender.exe). Machine-specific,
+# regenerated on first use, never committed.
+.claude/skills/rdlc-render/lib/
